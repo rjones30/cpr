@@ -18,7 +18,7 @@ find_library(CPR_LIBRARY
              HINTS ${CPR_LIBRARY_ROOT})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(CPR REQUIRED_VARS CPR_LIBRARY CPR_INCLUDE_DIR)
+find_package_handle_standard_args(cpr REQUIRED_VARS CPR_LIBRARY CPR_INCLUDE_DIR)
 
 if(CPR_FOUND)
     set(CPR_LIBRARIES ${CPR_LIBRARY})
