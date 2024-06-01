@@ -376,3 +376,9 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND CPR_BUILD_TESTS)
     add_subdirectory(test)
     restore_variable(DESTINATION CMAKE_CXX_CLANG_TIDY BACKUP CMAKE_CXX_CLANG_TIDY_BKP)
 endif()
+
+# install a special fixup script for later versions of cmake
+file(GLOB _cmake_fixup_files "${CMAKE_SOURCE_DIR}/cmake-fix/*.cmake")
+foreach(_cmake_fixup_file IN LISTS _cmake_fixup_files)
+    install(FILES ${_cmake_fixup_file} DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CURL")
+endforeach()
