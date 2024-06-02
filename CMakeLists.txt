@@ -18,6 +18,8 @@ else()
     endif()
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+
 # Avoid the dll boilerplate code for windows
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
