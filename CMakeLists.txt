@@ -83,6 +83,20 @@ if (CPR_FORCE_USE_SYSTEM_CURL)
     set(CPR_USE_SYSTEM_CURL ${CPR_FORCE_USE_SYSTEM_CURL})
 endif()
 
+# run local install scripts for perl and openssl during configure phase
+if(CPR_ENABLE_SSL)
+    if(UNIX AND APPLE)
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/perl_macos_installer.sh ${CMAKE_INSTALL_PREFIX})
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/openssl_macos_installer.sh ${CMAKE_INSTALL_PREFIX})
+    elseif(UNIX)
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/perl_linux_installer.sh ${CMAKE_INSTALL_PREFIX})
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/openssl_linux_installer.sh ${CMAKE_INSTALL_PREFIX})
+    else()
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/perl_win32_installer.bat ${CMAKE_INSTALL_PREFIX})
+        execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.bat ${CMAKE_INSTALL_PREFIX})
+    endif()
+endif()
+
 include(GNUInstallDirs)
 include(FetchContent)
 include(cmake/code_coverage.cmake)
@@ -168,7 +182,7 @@ endif()
 
 if(SSL_BACKEND_USED STREQUAL "OpenSSL")
 # Fix missing OpenSSL includes for Windows since in 'ssl_ctx.cpp' we include OpenSSL directly
-find_package(OpenSSL REQUIRED)
+# find_package(OpenSSL REQUIRED)
     add_compile_definitions(OPENSSL_BACKEND_USED)
 endif()
 
