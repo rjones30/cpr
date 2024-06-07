@@ -39,7 +39,7 @@ tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
 ./Configure -des -Dprefix=$install_prefix
-make VERBOSE=1
+make VERBOSE=1 -j4
 make install
 
 if ! $install_prefix/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
