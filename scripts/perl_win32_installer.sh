@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# perl_linux_installer.sh - script to install perl with CPAN in userspace
-#                           on a generic linux host from sources, assuming that
+# perl_win32_installer.sh - script to install perl with CPAN in userspace
+#                           on a generic win32 host from sources, assuming that
 #                           development tools (gnu compilers, linker) and the
 #                           curl utility are already present.
 #
@@ -12,14 +12,14 @@ release=https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
 tarball=$(basename $release)
 
 function usage() {
-    echo "Usage: perl_linux_installer.sh <install_prefix>"
+    echo "Usage: perl_win32_installer.sh <install_prefix>"
     echo " where <install_prefix>/bin is the intended destination"
     echo " for the perl executables, and <install_prefix>/lib is"
     echo " the intended installation directory for modules."
     exit 1
 }
 function error_exit() {
-    echo "perl_linux_installer.sh error - $2"
+    echo "perl_win32_installer.sh error - $2"
     exit $1
 }
 
