@@ -99,8 +99,12 @@ else()
           CXX_STANDARD ${CMAKE_CXX_STANDARD}
           CXX_STANDARD_REQUIRED ON
           CXX_EXTENSIONS OFF
+	  OUTPUT_VARIABLE COMPILE_OUTPUT
         )
 	if(NOT CXXFS_SUPPORTED)
+          message("try_compile failure message:\n${COMPILE_OUTPUT}")
+	  file(${TMP_BINARY_DIR}/CMakeFiles/CMakeOutput.log TRY_COMPILE_LOG)
+	  message("Here is the detailed log of the try_compile command\n${TRY_COMPILE_LOG}")
           message(FATAL_ERROR "Your compiler does not support the c++fs feature of c++17 or cpr is unable to determine the proper compiler flags for it.")
 	endif()
       endif()
