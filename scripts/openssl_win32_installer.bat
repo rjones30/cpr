@@ -50,4 +50,3 @@ echo Verifying OpenSSL installation...
 echo OpenSSL %OPENSSL_VERSION% installation completed successfully.
 
 endlocal
-pause
