@@ -101,7 +101,7 @@ if(CPR_ENABLE_SSL)
     else()
         find_package(Perl REQUIRED)
 	message("starting the openssl install script using ${PERL_EXECUTABLE}")
-	execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.sh ${CMAKE_INSTALL_PREFIX} ${PERL_EXECUTABLE})
+	execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.sh ${CMAKE_INSTALL_PREFIX} ${PERL_EXECUTABLE} ${CMAKE_CXX_COMPILER})
     endif()
 endif()
 
