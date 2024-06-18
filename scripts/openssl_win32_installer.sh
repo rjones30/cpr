@@ -41,8 +41,8 @@ tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
 ./config no-shared --prefix=$install_prefix --openssldir=$install_prefix
-$make
-$make install
+"$make"
+"$make" install
 
 if ! $install_prefix/bin/openssl version; then
     error_exit $? "openssl installation failed"

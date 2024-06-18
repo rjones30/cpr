@@ -41,8 +41,8 @@ tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
 cd win32
-$make -f Makefile INST_TOP=$install_prefix
-$make -f Makefile install
+"$make" -f Makefile INST_TOP=$install_prefix
+"$make" -f Makefile install
 
 if ! $install_prefix/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl installation failed"
