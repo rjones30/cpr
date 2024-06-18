@@ -12,11 +12,10 @@ release="https://www.openssl.org/source/openssl-3.2.1.tar.gz"
 tarball=$(basename $release)
 
 function usage() {
-    echo "Usage: openssl_win32_installer.sh <install_prefix> <perl> <cc>"
+    echo "Usage: openssl_win32_installer.sh <install_prefix> <cc>"
     echo " where <install_prefix>/lib is the intended destination"
-    echo " for the openssl libraries, <perl> is the full path"
-    echo " to the perl executable needed to build openssl, and <cc>"
-    echo " is the full path to the Visual Studio c++ compiler."
+    echo " for the openssl libraries, and <cc> is the full path"
+    echo " to the Visual Studio c++ compiler."
     exit 1
 }
 function error_exit() {
@@ -24,26 +23,25 @@ function error_exit() {
     exit $1
 }
 
-if [ $# -ne 3 ]; then
+if [ $# -ne 2 ]; then
     usage
 elif ! which curl >/dev/null 2>/dev/null; then
     error_exit $? "curl command is not available, cannot continue."
 else
     install_prefix=$1
-    perl=$2
-    cl=$3
+    clexe=$2
 fi
 
 perl --version
 if [ $? != 0 ]; then
-    echo "perl command is not in the PATH: $perl"
-    export PATH=$PATH:$(dirname $perl)
+    echo "perl command is not in the PATH, looking in the install area"
+    export PATH=$PATH:$install_prefix/perl/bin
     perl --version
 fi
 
 nmake -P
 if [ $? != 0 ]; then
-    nmake=$(echo $cl | sed 's/cl.exe/nmake.exe/')
+    nmake=$(echo $clexe | sed 's/cl.exe/nmake.exe/')
     "$nmake" -P
 fi
 
