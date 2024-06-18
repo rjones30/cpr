@@ -38,9 +38,12 @@ curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
-./Configure -des -Dprefix=$install_prefix
-make VERBOSE=1 -j4
-make install
+#./Configure -des -Dprefix=$install_prefix
+#make VERBOSE=1 -j4
+#make install
+cd win32
+nmake -f Makefile INST_TOP=$install_prefix
+nmake -f Makefile install
 
 if ! $install_prefix/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl installation failed"
