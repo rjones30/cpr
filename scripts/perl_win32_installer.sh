@@ -8,8 +8,8 @@
 # author: richard.t.jones at uconn.edu
 # version: june 5, 2024
 
-release=https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-64bit.msi
-installer_path=strawberry-perl-5.32.1.1-64bit.msi
+release=https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip
+installer_path=strawberry-perl-5.32.1.1-32bit-portable.zip
 
 function usage() {
     echo "Usage: perl_win32_installer.sh <install_prefix>"
@@ -36,7 +36,8 @@ fi
 
 curl $release -o $installer_path || error_exit $? "unable to GET $release"
 echo "Installing Strawberry Perl in $install_prefix"
-msiexec /i "$installer_path" INSTALLDIR="%install_prefix" /quiet
+#msiexec /i "$installer_path" INSTALLDIR="%install_prefix" /quiet
+tar xf $installer_path -C "$install_prefix
 
 if ! $install_prefix/perl/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl installation failed"
