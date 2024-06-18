@@ -36,7 +36,7 @@ fi
 
 curl $release -o $installer_path || error_exit $? "unable to GET $release"
 echo "Installing Strawberry Perl in $install_prefix"
-tar xf $installer_path -C "$install_prefix
+tar xf $installer_path -C "$install_prefix"
 
 if ! $install_prefix/perl/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl installation failed"
