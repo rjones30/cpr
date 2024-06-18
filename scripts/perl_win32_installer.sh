@@ -24,7 +24,7 @@ function error_exit() {
     exit $1
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
     usage
 elif ! which curl >/dev/null 2>/dev/null; then
     error_exit $? "curl command is not available, cannot continue."
