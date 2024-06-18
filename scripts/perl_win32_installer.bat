@@ -25,6 +25,8 @@ set "installdir=%1"
 echo Installing Strawberry Perl in %installdir% ...
 msiexec /i "%installerPath%" INSTALLDIR="%installdir%" /quiet
 
+dir /S "%installdir%"
+
 REM Verify the installation
 echo Verifying the Perl installation...
 set "perlPath=%installdir%\perl\bin\perl.exe"
