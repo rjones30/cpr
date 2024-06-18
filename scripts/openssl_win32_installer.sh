@@ -41,18 +41,17 @@ if [ $? != 0 ]; then
     perl --version
 fi
 
-nmake /P
+nmake -P
 if [ $? != 0 ]; then
     nmake=$(echo $cl | sed 's/cl.exe/nmake.exe/')
-    "$nmake" /P
+    "$nmake" -P
 fi
 
 curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
-installtop="$(echo $install_prefix | sed 's|/|\\|g')"
 cd $source
-"$nmake" -f win32\Makefile INST_TOP="$install_top"
+"$nmake" -f win32\Makefile INST_TOP="$install_prefix"
 "$nmake" -f win32\Makefile install
 
 if ! $install_prefix/bin/openssl version; then
