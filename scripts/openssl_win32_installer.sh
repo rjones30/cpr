@@ -51,8 +51,9 @@ curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
-"$nmake" -f win32/Makefile INST_TOP="$install_prefix"
-"$nmake" -f win32/Makefile install
+./config no-shared --prefix=$install_prefix --openssldir=$install_prefix
+"$nmake" VERBOSE=1 INST_TOP="$install_prefix"
+"$nmake" install
 
 if ! $install_prefix/bin/openssl version; then
     error_exit $? "openssl installation failed"
