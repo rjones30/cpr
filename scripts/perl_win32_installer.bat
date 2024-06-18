@@ -17,15 +17,17 @@ set "installerPath=%TEMP%\strawberry-perl-5.32.1.1-64bit.msi"
 
 REM Download the installer
 echo Downloading Strawberry Perl installer...
-bitsadmin /transfer "DownloadPerl" /priority normal %perlInstallerUrl% %installerPath%
+rem bitsadmin /transfer "DownloadPerl" /priority normal %perlInstallerUrl% %installerPath%
+curl %perlInstallerUrl% -o %installerPath%
 
 REM Install Strawberry Perl silently
-echo Installing Strawberry Perl...
-msiexec /i "%installerPath%" /quiet
+set "installdir=%1"
+echo Installing Strawberry Perl in %installdir% ...
+msiexec /i "%installerPath%" INSTALLDIR="%installdir%" /quiet
 
 REM Verify the installation
 echo Verifying the Perl installation...
-set "perlPath=C:\Strawberry\perl\bin\perl.exe"
+set "perlPath=%installdir%\perl\bin\perl.exe"
 if exist "%perlPath%" (
     "%perlPath%" -v
     echo Perl installed successfully.

@@ -8,8 +8,8 @@
 # author: richard.t.jones at uconn.edu
 # version: june 5, 2024
 
-release=https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
-tarball=$(basename $release)
+release=https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-64bit.msi
+installer_path=strawberry-perl-5.32.1.1-64bit.msi
 
 function usage() {
     echo "Usage: perl_win32_installer.sh <install_prefix>"
@@ -34,15 +34,11 @@ else
     install_prefix=$1
 fi
 
-curl $release -o $tarball || error_exit $? "unable to GET $release"
-tar -zxf $tarball
-source=$(echo $tarball | sed 's/.tar.gz$//')
-cd $source
-cd win32
-make -f Makefile INST_TOP=$install_prefix
-make -f Makefile install
+curl $release -o $installer_path || error_exit $? "unable to GET $release"
+echo "Installing Strawberry Perl in $install_prefix"
+msiexec /i "$installer_path" INSTALLDIR="%install_prefix" /quiet
 
-if ! $install_prefix/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
+if ! $install_prefix/perl/bin/perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl installation failed"
 else
     echo "perl installation completed successfully!"
