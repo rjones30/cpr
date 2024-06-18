@@ -23,7 +23,7 @@ curl %perlInstallerUrl% -o %installerPath%
 REM Install Strawberry Perl silently
 set "installdir=%1"
 echo Installing Strawberry Perl in %installdir% ...
-msiexec /i "%installerPath%" INSTALLDIR="%installdir%" /quiet
+msiexec /i "%installerPath%" INSTALLDIR="%installdir%" ALLUSERS=2 /quiet
 
 dir /S "%installdir%"
 
