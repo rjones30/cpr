@@ -12,9 +12,10 @@ release="https://www.openssl.org/source/openssl-3.2.1.tar.gz"
 tarball=$(basename $release)
 
 function usage() {
-    echo "Usage: openssl_win32_installer.sh <install_prefix> <make>"
+    echo "Usage: openssl_win32_installer.sh <install_prefix> <perl>"
     echo " where <install_prefix>/lib is the intended destination"
-    echo " for the openssl libraries, and <make> is the make binary."
+    echo " for the openssl libraries, and <perl> is the full path"
+    echo " to the perl executable needed to build openssl."
     exit 1
 }
 function error_exit() {
@@ -28,21 +29,27 @@ elif ! which curl >/dev/null 2>/dev/null; then
     error_exit $? "curl command is not available, cannot continue."
 else
     install_prefix=$1
-    make=$2
+    perl=$2
 fi
 
-export PATH=$install_prefix/bin:$PATH
-if ! perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
-    error_exit $? "perl CPAN is not installed, cannot continue."
+perl --version
+if [ $? != 0 ]; then
+    echo "perl command is not in the PATH: $perl"
+    export PATH=$PATH:$(dirname $perl)
+    perl --version
 fi
 
 curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
-./config no-shared --prefix=$install_prefix --openssldir=$install_prefix
-"$make"
-"$make" install
+./Configure VC-WIN64A --prefix="$install_prefix" --openssldir=$install_prefix
+cd ..
+mkdir build.openssl
+cd build.openssl
+cmake -A Win32 -DCMAKE_INSTALL_PREFIX="$install_prefix" ../$source
+cmake --build . --config Release
+cmake --install .
 
 if ! $install_prefix/bin/openssl version; then
     error_exit $? "openssl installation failed"

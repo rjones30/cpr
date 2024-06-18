@@ -12,9 +12,9 @@ release="https://www.openssl.org/source/openssl-3.2.1.tar.gz"
 tarball=$(basename $release)
 
 function usage() {
-    echo "Usage: openssl_macos_installer.sh <install_prefix> <make>"
+    echo "Usage: openssl_macos_installer.sh <install_prefix>"
     echo " where <install_prefix>/lib is the intended destination"
-    echo " for the openssl libraries, and <make> is the make binary."
+    echo " for the openssl libraries."
     exit 1
 }
 function error_exit() {
@@ -22,13 +22,12 @@ function error_exit() {
     exit $1
 }
 
-if [ $# -ne 2 ]; then
+if [ $# -ne 1 ]; then
     usage
 elif ! which curl >/dev/null 2>/dev/null; then
     error_exit $? "curl command is not available, cannot continue."
 else
     install_prefix=$1
-    make=$2
 fi
 
 export PATH=$install_prefix/bin:$PATH
@@ -41,8 +40,8 @@ tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
 ./config no-shared --prefix=$install_prefix --openssldir=$install_prefix
-"$make" VERBOSE=1 -j4
-"$make" install
+make VERBOSE=1 -j4
+make install
 
 if ! $install_prefix/bin/openssl version; then
     error_exit $? "openssl installation failed"
