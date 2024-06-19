@@ -33,7 +33,9 @@ else
 fi
 
 export PATH=$install_prefix/perl/bin:$PATH
+which perl
 perl --version
+perl -MCPAN -e 'install Locale::Maketext::Simple'
 
 nmake -P
 if [ $? != 0 ]; then
