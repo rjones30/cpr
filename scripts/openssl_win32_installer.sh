@@ -32,13 +32,11 @@ else
     clexe=$2
 fi
 
-export PATH=$install_prefix/perl/bin:$PATH
-echo "PATH is now $PATH"
-hash -r
-$install_prefix/perl/bin/perl --version
+unix_install_prefix=$(echo $install_prefix | awk -F: '{print "/"tolower($1)$2}')
+export PATH=$unix_install_prefix/perl/bin:$PATH
+$unix_install_prefix/perl/bin/perl --version
 echo "perl executable is" $(which perl)
 perl --version
-perl -MCPAN -e 'install Locale::Maketext::Simple'
 
 nmake -P
 if [ $? != 0 ]; then
