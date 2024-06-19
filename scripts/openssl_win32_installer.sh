@@ -44,7 +44,20 @@ curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
+echo "running config: ./config no-shared --prefix=$install_prefix --openssldir=$install_prefix"
 ./config no-shared --prefix="$install_prefix" --openssldir="$install_prefix"
+if [ $? != 0 ]; then
+    echo "config failed, trying again with ./config no-shared --prefix=$1 --openssldir=$1"
+    ./config no-shared --prefix="$1" --openssldir="$1"
+    if [ $? != 0 ]; then
+        win_install_prefix=$(echo $1 | sed 's|/|\\|g')
+        echo "config failed again, trying again with ./config no-shared --prefix=$win_install_prefix --openssldir=$win_install_prefix"
+        ./config no-shared --prefix="$win_install_prefix" --openssldir="$win_install_prefix"
+        if [ $? != 0 ]; then
+            echo "no way, no how, giving up!"
+        fi
+    fi
+fi
 nmake -f Makefile VERBOSE=1 INST_TOP="$install_prefix"
 nmake -f Makefile install
 
