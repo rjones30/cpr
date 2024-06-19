@@ -58,6 +58,8 @@ if [ $? != 0 ]; then
         fi
     fi
 fi
+echo running /usr/bin/env perl
+/usr/bin/env perl
 nmake -f Makefile VERBOSE=1 INST_TOP="$install_prefix"
 nmake -f Makefile install
 
