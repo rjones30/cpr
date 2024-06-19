@@ -32,12 +32,8 @@ else
     clexe=$2
 fi
 
+export PATH=$install_prefix/perl/bin:$PATH
 perl --version
-if [ $? != 0 ]; then
-    echo "perl command is not in the PATH, looking in the install area"
-    export PATH=$PATH:$install_prefix/perl/bin
-    perl --version
-fi
 
 nmake -P
 if [ $? != 0 ]; then
