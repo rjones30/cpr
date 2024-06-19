@@ -33,26 +33,22 @@ else
 fi
 
 msvs_prefix=$(echo $clexe | sed s'|/cl.exe$||')
-export PATH=$install_prefix/perl/bin:$msvs_prefix:$PATH
+export PATH="$install_prefix/perl/bin:$msvs_prefix:$PATH"
 echo "PATH is $PATH"
 echo "perl executable is" $(which perl)
 perl --version
 
 nmake -P
-if [ $? != 0 ]; then
-    nmake=$(echo $clexe | sed 's/cl.exe/nmake.exe/')
-    "$nmake" -P
-fi
 
 curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
-./config no-shared --prefix=$install_prefix --openssldir=$install_prefix
-"$nmake" -f Makefile VERBOSE=1 INST_TOP="$install_prefix"
-"$nmake" -f Makefile install
+./config no-shared --prefix="$install_prefix" --openssldir="$install_prefix"
+nmake -f Makefile VERBOSE=1 INST_TOP="$install_prefix"
+nmake -f Makefile install
 
-if ! $install_prefix/bin/openssl version; then
+if ! "$install_prefix/bin/openssl" version; then
     error_exit $? "openssl installation failed"
 else
     echo "openssl installation completed successfully!"
