@@ -28,13 +28,13 @@ if [ $# -ne 2 ]; then
 elif ! which curl >/dev/null 2>/dev/null; then
     error_exit $? "curl command is not available, cannot continue."
 else
-    install_prefix=$1
-    clexe=$2
+    install_prefix=$(echo $1 | awk -F: '{print "/"tolower($1)$2}')
+    clexe=$(echo $2 | awk -F: '{print "/"tolower($1)$2}')
 fi
 
-unix_install_prefix=$(echo $install_prefix | awk -F: '{print "/"tolower($1)$2}')
-export PATH=$unix_install_prefix/perl/bin:$PATH
-$unix_install_prefix/perl/bin/perl --version
+msvs_prefix=$(echo $clexe | sed s'|/cl.exe$||')
+export PATH=$install_prefix/perl/bin:$msvs_prefix:$PATH
+echo "PATH is $PATH"
 echo "perl executable is" $(which perl)
 perl --version
 
