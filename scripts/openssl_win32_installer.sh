@@ -39,15 +39,26 @@ echo "perl executable is" $(which perl)
 perl --version
 
 nmake -P
+nasm -v
+if [ $? != 0 ]; then
+    echo "Downloading NASM..."
+    nasm_version=2.16
+    nasm_zip_url="https://www.nasm.us/pub/nasm/releasebuilds/$nasm_version/win64/nasm-$nasm_version-win64.zip"
+    curl -L -o nasm.zip $nasm_zip_url
+    echo "Extracting NASM..."
+    powershell -Command "& {Expand-Archive -Path nasm.zip -DestinationPath $1}"
+    rm -rf nasm.zip
+    export PATH="$PATH:$install_prefix/nasm-$nasm_version"
+    echo "Verifying NASM installation"
+    nasm -v
+fi
 
-curl $release -o $tarball || error_exit $? "unable to GET $release"
+curl -L $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
-echo running /usr/bin/env perl
-/usr/bin/env perl
 echo "running config: ./config no-shared --prefix=$install_prefix --openssldir=$install_prefix"
-./Configure no-shared --prefix="$install_prefix" --openssldir="$install_prefix"
+./config no-shared --prefix="$install_prefix" --openssldir="$install_prefix"
 if [ $? != 0 ]; then
     echo "config failed, trying again with ./config no-shared --prefix=$1 --openssldir=$1"
     ./Configure no-shared --prefix="$1" --openssldir="$1"
