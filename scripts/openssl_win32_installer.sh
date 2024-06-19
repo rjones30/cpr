@@ -34,9 +34,13 @@ fi
 
 export PATH=$install_prefix/perl/bin:$PATH
 echo "PATH is now $PATH"
+echo "listing of $install_prefix"
 ls $install_prefix
+echo "listing of $install_prefix/perl"
 ls $install_prefix/perl
+echo "listing of $install_prefix/perl/bin"
 ls $install_prefix/perl/bin
+$install_prefix/perl/bin/perl --version
 echo "perl executable is" $(which perl)
 perl --version
 perl -MCPAN -e 'install Locale::Maketext::Simple'
