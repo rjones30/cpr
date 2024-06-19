@@ -44,6 +44,8 @@ curl $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source
+echo running /usr/bin/env perl
+/usr/bin/env perl
 echo "running config: ./config no-shared --prefix=$install_prefix --openssldir=$install_prefix"
 ./Configure no-shared --prefix="$install_prefix" --openssldir="$install_prefix"
 if [ $? != 0 ]; then
@@ -58,8 +60,6 @@ if [ $? != 0 ]; then
         fi
     fi
 fi
-echo running /usr/bin/env perl
-/usr/bin/env perl
 nmake -f Makefile VERBOSE=1 INST_TOP="$install_prefix"
 nmake -f Makefile install
 
