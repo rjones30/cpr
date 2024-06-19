@@ -42,6 +42,8 @@ echo "listing of $install_prefix/perl/bin"
 ls $install_prefix/perl/bin
 $install_prefix/perl/bin/perl --version
 echo "perl executable is" $(which perl)
+alias
+alias perl=$install_prefix/perl/bin/perl
 perl --version
 perl -MCPAN -e 'install Locale::Maketext::Simple'
 
