@@ -1,52 +1,45 @@
 @echo off
 REM
-REM openssl_win32_installer.sh - script to install openssl in userspace
-REM                              on a win32 host from sources, assuming that
-REM                              development tools (msvc compilers, linker)
-REM                              and the bitsdadmin utility are already present.
+REM openssl_win32_installer.bat - script to install openssl in userspace
+REM                               on a generic win32 host from sources, assuming that
+REM                               development tools (gnu compilers, linker) and the
+REM                               curl utility are already present.
 REM
 REM author: richard.t.jones at uconn.edu
 REM version: june 5, 2024
 
 setlocal
 
-REM Set OpenSSL version
-set OPENSSL_VERSION=openssl-3.2.1
+set openssl_version=3.2.1
+set openssl_tarball_url="https://www.openssl.org/source/openssl-%openssl_version%.tar.gz"
+set nasm_version=2.16
+set nasm_zip_url="https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win64/nasm-%NASM_VERSION%-win64.zip"
 
-REM Set installation directory
-set INSTALL_DIR=C:\OpenSSL-3
+for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Community\\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
+REM "c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+"%vcvarsall_bat" x86_amd64
 
-REM Set download directory
-set DOWNLOAD_DIR=%TEMP%
+nmake -P
 
-REM Set URL for OpenSSL source
-set OPENSSL_URL=https://www.openssl.org/source/%OPENSSL_VERSION%.tar.gz
+echo Downloading NASM...
+curl -L -o nasm.zip "%nasm_zip_url%"
+echo "install into %1\nasm-%nasm_version%"
+powershell -Command "& {Expand-Archive -Path nasm.zip -DestinationPath %1 -Force}"
+del nasm.zip
+set PATH="%PATH%;%1\nasm-%nasm_version%"
+echo "PATH is %PATH%"
+echo Verifying NASM installation...
+nasm -v
+echo NASM installation completed.
 
-REM Download OpenSSL
-echo Downloading OpenSSL version %OPENSSL_VERSION%...
-curl -L -o %DOWNLOAD_DIR%\%OPENSSL_VERSION%.tar.gz %OPENSSL_URL%
-
-REM Extract the tarball
-echo Extracting OpenSSL...
-tar zxf %DOWNLOAD_DIR%\%OPENSSL_VERSION%.tar.gz
-
-REM Change to the OpenSSL directory
-cd %DOWNLOAD_DIR%\%OPENSSL_VERSION%
-
-REM Configure, build, and install OpenSSL with static libraries
-echo Configuring OpenSSL for static libraries...
-openssl Configure VC-WIN64A no-shared --prefix=%INSTALL_DIR%
-
-echo Building OpenSSL...
-nmake
-
-echo Installing OpenSSL...
+REM curl -L %openssl_tarball_url% -o "openssl-%openssl_version%.tar.gz"
+REM tar -zxf openssl-%openssl_version%.tar.gz
+set source="openssl-%openssl_version%"
+cd %source%
+set PATH="%1\perl\bin;%PATH%"
+perl --version
+perl Configure no-shared --prefix="%1" --openssldir="%1"
+nmake VERBOSE=1 INST_TOP="%1"
 nmake install
-
-REM Verify installation
-echo Verifying OpenSSL installation...
-%INSTALL_DIR%\bin\openssl version
-
-echo OpenSSL %OPENSSL_VERSION% installation completed successfully.
 
 endlocal
