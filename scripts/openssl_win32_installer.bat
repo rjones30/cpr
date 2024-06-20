@@ -17,7 +17,7 @@ set nasm_zip_url="https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win6
 
 for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Community\\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
 REM "c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-"%vcvarsall_bat" x86_amd64
+"%vcvarsall_bat%" x86_amd64
 
 nmake -P
 
