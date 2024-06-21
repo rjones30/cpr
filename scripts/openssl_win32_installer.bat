@@ -15,8 +15,11 @@ set openssl_tarball_url="https://www.openssl.org/source/openssl-%openssl_version
 set nasm_version=2.16
 set nasm_zip_url="https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win64/nasm-%NASM_VERSION%-win64.zip"
 
-for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Community\\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
-for /f "delims=" %%i in ('powershell -Command "$input = '%vcvarsall_bat%'; $pattern = '\\Enterprise\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
+echo "Incoming path to cl is %2"
+for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Community\\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat1=%%i"
+echo "After first revision, path to vcvarsall_bat is %vcvarsall_bat1%"
+for /f "delims=" %%i in ('powershell -Command "$input = '%vcvarsall_bat1%'; $pattern = '\\Enterprise\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
+echo "After final revision, path to vcvarsall_bat is %vcvarsall_bat%"
 REM "c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
 "%vcvarsall_bat%" x86_amd64
 
@@ -29,6 +32,10 @@ powershell -Command "& {Expand-Archive -Path nasm.zip -DestinationPath %1 -Force
 del nasm.zip
 set PATH="%PATH%;%1\nasm-%nasm_version%"
 echo "PATH is %PATH%"
+echo "dir %1 is"
+dir "%1"
+echo "dir %1\nasm-%nasm_version% is"
+dir "%1\nasm-%nasm_version%"
 echo Verifying NASM installation...
 nasm -v
 echo NASM installation completed.
