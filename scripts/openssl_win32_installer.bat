@@ -19,11 +19,10 @@ set nasm_zip_url="https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win3
 echo "Incoming path to cl is %2"
 for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Community\\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat1=%%i"
 echo "After first revision, path to vcvarsall_bat is %vcvarsall_bat1%"
-for /f "delims=" %%i in ('powershell -Command "$input = '%vcvarsall_bat1%'; $pattern = '\\Enterprise\.*'; $replacement = '\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
+for /f "delims=" %%i in ('powershell -Command "$input = '%vcvarsall_bat1%'; $pattern = '\\Enterprise\.*'; $replacement = '\\Enterprise\\VC\\Auxiliary\\Build\\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
 echo "After final revision, path to vcvarsall_bat is %vcvarsall_bat%"
 REM "c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-REM "%vcvarsall_bat%" x86_amd64
-"%vcvarsall_bat%" x86
+"%vcvarsall_bat%" x86_amd64
 
 nmake -P
 
@@ -39,7 +38,9 @@ dir "%1"
 echo "dir %1\nasm-%nasm_version% is"
 dir "%1\nasm-%nasm_version%"
 echo Verifying NASM installation...
+where nasm.exe
 nasm -v
+nasm.exe -v
 echo NASM installation completed.
 
 REM curl -L %openssl_tarball_url% -o "openssl-%openssl_version%.tar.gz"
