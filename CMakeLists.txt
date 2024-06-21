@@ -86,6 +86,14 @@ if (CPR_FORCE_USE_SYSTEM_CURL)
     set(CPR_USE_SYSTEM_CURL ${CPR_FORCE_USE_SYSTEM_CURL})
 endif()
 
+# Function to convert Unix-style paths to Windows-style paths
+function(convert_to_windows_path unix_path result_var)
+    string(REPLACE "/" "\\" windows_path "${unix_path}")
+    set(${result_var} "${windows_path}" PARENT_SCOPE)
+endfunction()
+
+convert_to_windows_path("${CMAKE_INSTALL_PREFIX}" windows_install_prefix)
+
 # run local install scripts for perl and openssl during configure phase
 if(CPR_ENABLE_SSL)
     if(UNIX AND APPLE)
@@ -102,7 +110,7 @@ if(CPR_ENABLE_SSL)
         message("starting the perl install script ...")
         execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/perl_win32_installer.sh ${CMAKE_INSTALL_PREFIX})
         message("starting the openssl install script ...")
-        execute_process(COMMAND cmd /c ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.bat ${CMAKE_INSTALL_PREFIX} ${CMAKE_CXX_COMPILER})
+        execute_process(COMMAND cmd /c ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.bat ${windows_install_prefix} ${CMAKE_CXX_COMPILER})
     endif()
 endif()
 
