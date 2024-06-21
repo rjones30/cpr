@@ -93,6 +93,7 @@ function(convert_to_windows_path unix_path result_var)
 endfunction()
 
 convert_to_windows_path("${CMAKE_INSTALL_PREFIX}" windows_install_prefix)
+convert_to_windows_path("${CMAKE_CXX_COMPILER}" windows_cxx_compiler)
 
 # run local install scripts for perl and openssl during configure phase
 if(CPR_ENABLE_SSL)
@@ -110,7 +111,7 @@ if(CPR_ENABLE_SSL)
         message("starting the perl install script ...")
         execute_process(COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/perl_win32_installer.sh ${CMAKE_INSTALL_PREFIX})
         message("starting the openssl install script ...")
-        execute_process(COMMAND cmd /c ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.bat ${windows_install_prefix} ${CMAKE_CXX_COMPILER})
+        execute_process(COMMAND cmd /c ${CMAKE_SOURCE_DIR}/scripts/openssl_win32_installer.bat ${windows_install_prefix} ${windows_cxx_compiler})
     endif()
 endif()
 
