@@ -20,6 +20,7 @@ for /f "delims=" %%i in ('powershell -Command "$input = '%2'; $pattern = '\\Comm
 for /f "delims=" %%i in ('powershell -Command "$input = '%vcvarsall_bat1%'; $pattern = '\\Enterprise\\.*'; $replacement = '\Enterprise\VC\Auxiliary\Build\vcvarsall.bat'; $result = [regex]::Replace($input, $pattern, $replacement); Write-Output $result"') do set "vcvarsall_bat=%%i"
 call "%vcvarsall_bat%" x86_amd64
 
+echo Verifying nmake installation...
 nmake -P
 
 echo Downloading NASM...
@@ -28,6 +29,7 @@ echo "install into %1\nasm-%nasm_version%"
 powershell -Command "& {Expand-Archive -Path nasm.zip -DestinationPath %1 -Force}"
 del nasm.zip
 set "PATH=%1\nasm-%nasm_version%;%PATH%"
+echo Verifying NASM installation...
 nasm -v
 echo NASM installation completed.
 
@@ -38,7 +40,7 @@ cd %source%
 set "PATH=%1\perl\bin;%PATH%"
 perl --version
 perl Configure no-shared --prefix="%1" --openssldir="%1"
-nmake VERBOSE=1 INST_TOP="%1"
+nmake VERBOSE=1 INST_TOP="%1" -j4
 nmake install
 
 endlocal
