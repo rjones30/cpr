@@ -28,13 +28,11 @@ echo "install into %1\nasm-%nasm_version%"
 powershell -Command "& {Expand-Archive -Path nasm.zip -DestinationPath %1 -Force}"
 del nasm.zip
 set "PATH=%1\nasm-%nasm_version%;%PATH%"
-echo "PATH is %PATH%"
 nasm -v
-"%1\nasm-%nasm_version%\nasm" -v
 echo NASM installation completed.
 
-REM curl -L %openssl_tarball_url% -o "openssl-%openssl_version%.tar.gz"
-REM tar -zxf openssl-%openssl_version%.tar.gz
+curl -L %openssl_tarball_url% -o "openssl-%openssl_version%.tar.gz"
+tar -zxf openssl-%openssl_version%.tar.gz
 set "source=openssl-%openssl_version%"
 cd %source%
 set "PATH=%1\perl\bin;%PATH%"
