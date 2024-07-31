@@ -8,7 +8,7 @@
 # author: richard.t.jones at uconn.edu
 # version: june 5, 2024
 
-release="https://www.openssl.org/source/openssl-3.2.2.tar.gz"
+release="https://github.com/openssl/openssl/releases/download/openssl-3.2.2/openssl-3.2.2.tar.gz"
 tarball=$(basename $release)
 
 function usage() {

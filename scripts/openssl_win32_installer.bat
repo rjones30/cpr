@@ -11,7 +11,7 @@ REM version: june 5, 2024
 setlocal
 
 set "openssl_version=3.2.2"
-set "openssl_tarball_url=https://www.openssl.org/source/openssl-%openssl_version%.tar.gz"
+set "openssl_tarball_url=https://github.com/openssl/openssl/releases/download/openssl-3.2.2/openssl-%openssl_version%.tar.gz"
 set "nasm_version=2.16"
 set "nasm_zip_url=https://www.nasm.us/pub/nasm/releasebuilds/%nasm_version%/win64/nasm-%nasm_version%-win64.zip"
 set "nasm_zip_url=https://www.nasm.us/pub/nasm/releasebuilds/%nasm_version%/win32/nasm-%nasm_version%-win32.zip"
