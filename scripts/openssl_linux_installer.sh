@@ -35,7 +35,7 @@ if ! perl -MCPAN -e update CPAN 2>/dev/null >/dev/null; then
     error_exit $? "perl CPAN is not installed, cannot continue."
 fi
 
-curl $release -o $tarball || error_exit $? "unable to GET $release"
+curl -L $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source

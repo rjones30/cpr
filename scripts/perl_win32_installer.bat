@@ -18,7 +18,7 @@ set "installerPath=%TEMP%\strawberry-perl-5.32.1.1-64bit.msi"
 REM Download the installer
 echo Downloading Strawberry Perl installer...
 rem bitsadmin /transfer "DownloadPerl" /priority normal %perlInstallerUrl% %installerPath%
-curl %perlInstallerUrl% -o %installerPath%
+curl -L %perlInstallerUrl% -o %installerPath%
 
 REM Install Strawberry Perl silently
 set "installdir=%1"

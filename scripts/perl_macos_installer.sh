@@ -34,7 +34,7 @@ else
     install_prefix=$1
 fi
 
-curl $release -o $tarball || error_exit $? "unable to GET $release"
+curl -L $release -o $tarball || error_exit $? "unable to GET $release"
 tar -zxf $tarball
 source=$(echo $tarball | sed 's/.tar.gz$//')
 cd $source

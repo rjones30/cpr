@@ -36,7 +36,7 @@ else
     install_prefix=$1
 fi
 
-curl $release -o "$installer_path" || error_exit $? "unable to GET $release"
+curl -L $release -o "$installer_path" || error_exit $? "unable to GET $release"
 echo "Installing Strawberry Perl in $install_prefix"
 
 # Download 7-Zip installer
